@@ -6,67 +6,63 @@ To write a program to predict the type of species of the Iris flower using the S
 1. Hardware – PCs
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
-## Algorithm:
-1. Import pandas, numpy, matplotlib.pyplot, and necessary sklearn modules.
-2. Load the dataset using pd.read_csv()Separate features (x) and target (y) using .iloc.
-3. Use train_test_split() to divide the data into training and test sets.
-4. Create and fit a LinearRegression model with training data.
-5. Use the trained model to predict test set results (y_pred).
-6. Compute MSE, MAE, and RMSE for performance evaluation.
-7. Plot scatter and regression line for training and test sets.
+## Algorithm
+1.Import Iris dataset and split into features (X) and target (y).
+
+2.Standardize features and split into training and testing sets
+
+3.Set up SGDClassifier with desired hyperparameters.
+
+4.Fit the classifier to the training data.
+
+5.Use the model to predict species on the test set.
+
+6.Measure accuracy and other metrics to assess performance.
+
 ## Program:
 ```
 /*
 Program to implement the prediction of iris species using SGD Classifier.
-Developed by:    MADHANRAJ P
+Developed by: MADHANRAJ P
 RegisterNumber:  212223220052
 */
-```
-
-```
 import pandas as pd
 from sklearn.datasets import load_iris
+from sklearn.metrics import accuracy_score,confusion_matrix
 from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score,confusion_matrix
-import matplotlib.pyplot as plt
-import seaborn as sns
-```
-
-```
 iris=load_iris()
-df=pd.DataFrame(data=iris.data, columns=iris.feature_names)
+df=pd.DataFrame(data=iris.data,columns=iris.feature_names)
 df['target']=iris.target
-print(df.head())
+
+x=df.drop('target',axis=1)
+y=df['target']
+
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=42)
+sgd=SGDClassifier(max_iter=1000,tol=1e-3)
+sgd.fit(x_train,y_train)
+
+y_pred=sgd.predict(x_test)
+print("Prediction:\n",y_pred)
+
+accu=accuracy_score(y_test,y_pred)
+print("Accuracy:\n",accu)
+
+confu=confusion_matrix(y_test,y_pred)
+print("Confusion Matrix:\n",confu)
+
+report=classification_report(y_test,y_pred)
+print("classification_report:\n",report)
 ```
 
-<img width="750" alt="image" src="https://github.com/user-attachments/assets/551e037b-c209-4ad1-a8e0-93173ede22fb">
+## Output:
+![image](https://github.com/user-attachments/assets/6e04323e-c036-4cd5-b050-a010c3ea43e9)
 
-```
-X=df.drop('target',axis=1)
-Y=df['target']
-X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.2,random_state=1)
-sgd_clf=SGDClassifier(max_iter=1000,tol=1e-3)
-```
+![image](https://github.com/user-attachments/assets/53c565af-d46c-407e-8ddc-0fbe864de797)
 
-```
-sgd_clf.fit(X_train,Y_train)
-```
-<img width="650" alt="image" src="https://github.com/user-attachments/assets/4e8d4a22-41de-47f1-bb8c-59bcd32a0b5c">
+![image](https://github.com/user-attachments/assets/f30fee91-20bd-4110-a5c2-0641ac4dcc6d)
 
-```
-y_pred=sgd_clf.predict(X_test)
-accuracy=accuracy_score(Y_test,y_pred)
-print(f"Accuracy: {accuracy:.3f}")
-```
-<img width="650" alt="image" src="https://github.com/user-attachments/assets/b215ef46-3d14-4a75-8b8c-33fde6509893">
-
-```
-cm=confusion_matrix(Y_test,y_pred)
-print("Confusion Matrix:")
-print(cm)
-```
-<img width="650" alt="image" src="https://github.com/user-attachments/assets/60985f71-e36a-4316-bf5f-150b2df345d1">
+![image](https://github.com/user-attachments/assets/1b7a830f-c65a-43ce-a747-2d49f32a44fc)
 
 
 ## Result:
